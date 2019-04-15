@@ -55,8 +55,14 @@ namespace ImageMagick
                         }
                         #endregion
 
-                        #region Уменьшаем изображение
-                        if (!File.Exists(outFile))
+                        #region Уменьшаем изображения
+                        // Изображение уже есть
+                        // Размер изображения совпадает по высоте или ширине
+                        if (File.Exists(outFile) && GetModelOfExistingFile(outFile) is ResizeFolderModel existImg && (width == existImg.width || height == existImg.height))
+                        {
+                            md.Add(GetModelOfExistingFile(outFile));
+                        }
+                        else
                         {
                             image.Resize(width, height);
                             image.Write(outFile);
@@ -69,16 +75,22 @@ namespace ImageMagick
                                 height = image.Height
                             });
                         }
-                        else
-                        {
-                            md.Add(GetModelOfExistingFile(outFile));
-                        }
                         #endregion
 
-                        #region Привью   
-                        if (!File.Exists(outFileSmall))
+                        #region Привью
+                        // Привью уже есть
+                        // Размер привью совпадает по высоте и ширине
+                        if (File.Exists(outFileSmall) && GetModelOfExistingFile(outFileSmall) is ResizeFolderModel existSmallImg && widtSmallh == existSmallImg.width && heightSmall == existSmallImg.height)
                         {
-                            image.Resize(widtSmallh, 0);
+                            md.Add(GetModelOfExistingFile(outFileSmall));
+                        }
+                        else
+                        {
+                            if (heightSmall > widtSmallh)
+                                image.Resize(0, heightSmall);
+                            else
+                                image.Resize(widtSmallh, 0);
+
                             image.Crop(0, 0, widtSmallh, heightSmall);
                             image.Write(outFileSmall);
 
@@ -89,10 +101,6 @@ namespace ImageMagick
                                 width = image.Width,
                                 height = image.Height
                             });
-                        }
-                        else
-                        {
-                            md.Add(GetModelOfExistingFile(outFileSmall));
                         }
                         #endregion
                     }
