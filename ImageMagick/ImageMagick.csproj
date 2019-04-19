@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\Base64.cs" />
     <Compile Include="Engine\Transliteration.cs" />
     <Compile Include="Models\CropTileModel.cs" />
     <Compile Include="Models\ResizeFolderModel.cs" />

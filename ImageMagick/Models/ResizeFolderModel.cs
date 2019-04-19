@@ -2,10 +2,11 @@
 {
     public class ResizeFolderModel
     {
-        public string path { get; set; }
+        public string folder_name;
 
-        public int width { get; set; }
+        public int width;
+        public int height;
 
-        public int height { get; set; }
+        public bool croped;
     }
 }
