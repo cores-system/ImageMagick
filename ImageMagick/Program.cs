@@ -18,7 +18,7 @@ namespace ImageMagick
     {
         static void Main(string[] args)
         {
-            //args = new string[] { @"C:\Users\htc\Desktop\дом", @"C:\Users\htc\Desktop\test", "resizefolder", "W3siZm9sZGVyX25hbWUiOiJiaWciLCJ3aWR0aCI6MTIwMCwiaGVpZ2h0IjowfSx7ImZvbGRlcl9uYW1lIjoic21hbGwiLCJ3aWR0aCI6MjAwLCJoZWlnaHQiOjEyMCwiY3JvcGVkIjp0cnVlfSx7ImZvbGRlcl9uYW1lIjoibWVkaXVtIiwid2lkdGgiOjUwMCwiaGVpZ2h0Ijo0MDAsImNyb3BlZCI6dHJ1ZX1d" };
+            //args = new string[] { @"C:\Users\htc\Desktop\дом", @"C:\Users\htc\Desktop\test", "resizefolder", "W3siZm9sZGVyX25hbWUiOiJtZWRpdW0iLCJ3aWR0aCI6NTAwLCJoZWlnaHQiOjMwMCwiY3JvcGVkIjoiY292ZXIifV0=" };
 
             OpenCL.IsEnabled = false;
             string inFileOrFolder = PathToUnix(args[0]);
@@ -72,12 +72,12 @@ namespace ImageMagick
                                     float ratio = Math.Max(ratio_w, ratio_h);
 
                                     // Новый размер изображения
-                                    int new_width = (int)Math.Round(image_w * ratio);
-                                    int new_height = (int)Math.Round(image_h * ratio);
+                                    int new_width = (int)Math.Ceiling(image_w * ratio);
+                                    int new_height = (int)Math.Ceiling(image_h * ratio);
 
                                     // Куда двигать, да бы было по центру
-                                    int offset_left = (int)Math.Round((new_width - resize_w) / 2);
-                                    int offset_top = (int)Math.Round((new_height - resize_h) / 2);
+                                    int offset_left = (int)Math.Ceiling((new_width - resize_w) / 2);
+                                    int offset_top = (int)Math.Ceiling((new_height - resize_h) / 2);
 
                                     // Сохраняем изображение
                                     image.Resize(new_width, new_height);
