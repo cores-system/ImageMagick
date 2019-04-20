@@ -7,6 +7,6 @@
         public int width;
         public int height;
 
-        public bool croped;
+        public string croped;
     }
 }

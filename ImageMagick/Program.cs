@@ -21,8 +21,8 @@ namespace ImageMagick
             //args = new string[] { @"C:\Users\htc\Desktop\дом", @"C:\Users\htc\Desktop\test", "resizefolder", "W3siZm9sZGVyX25hbWUiOiJiaWciLCJ3aWR0aCI6MTIwMCwiaGVpZ2h0IjowfSx7ImZvbGRlcl9uYW1lIjoic21hbGwiLCJ3aWR0aCI6MjAwLCJoZWlnaHQiOjEyMCwiY3JvcGVkIjp0cnVlfSx7ImZvbGRlcl9uYW1lIjoibWVkaXVtIiwid2lkdGgiOjUwMCwiaGVpZ2h0Ijo0MDAsImNyb3BlZCI6dHJ1ZX1d" };
 
             OpenCL.IsEnabled = false;
-            string inFileOrFolder = args[0];
-            string outFileOrFolder = args[1];
+            string inFileOrFolder = PathToUnix(args[0]);
+            string outFileOrFolder = PathToUnix(args[1]);
             string cmd = args[2].ToLower().Trim();
 
             #region resizefolder
@@ -32,7 +32,7 @@ namespace ImageMagick
                 {
                     Parallel.ForEach(Directory.GetFiles(inFileOrFolder, "*.*", SearchOption.AllDirectories), new ParallelOptions() { MaxDegreeOfParallelism = 8 }, inFile =>
                     {
-                        string outFolder = Path.GetDirectoryName(inFile).Replace(inFileOrFolder, $"{outFileOrFolder}/{md.folder_name}");
+                        string outFolder = PathToUnix(Path.GetDirectoryName(PathToUnix(inFile).Replace(inFileOrFolder, $"{outFileOrFolder}/{md.folder_name}")));
                         Directory.CreateDirectory(outFolder);
                         string outFile = $"{outFolder}/{Transliteration.Translit(Path.GetFileName(inFile))}";
 
@@ -52,7 +52,7 @@ namespace ImageMagick
                                 }
                             #endregion
 
-                            if (md.croped)
+                            if (md.croped == "cover")
                             {
                                 // Привью нету
                                 // Размер привью не совпадает по высоте или ширине
@@ -164,7 +164,7 @@ namespace ImageMagick
                             {
                                 CropTileModel md = new CropTileModel();
                                 int width = int.Parse(args[3]), height = int.Parse(args[4]);
-                                string outFolder = Regex.Replace(args[1], @"(\\|/)$", "") + Path.DirectorySeparatorChar;
+                                string outFolder = PathToUnix(Regex.Replace(args[1], @"(\\|/)$", "/"));
 
                                 // Удаляем существующие файлы
                                 foreach (var rmFile in Directory.EnumerateFiles(outFolder))
@@ -219,6 +219,12 @@ namespace ImageMagick
 
             // Default
             Console.WriteLine("{\"success\":true}");
+        }
+
+
+        static string PathToUnix(string s)
+        {
+            return Regex.Replace(s, "\\\\", "/");
         }
     }
 }
